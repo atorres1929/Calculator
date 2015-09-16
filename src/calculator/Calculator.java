@@ -32,7 +32,7 @@ public class Calculator extends JFrame{
     public final Dimension prefferedSize = new Dimension(FRAME_HEIGHT,FRAME_WIDTH);
     private JTextField text;
     private JTextField answerField;
-    private String defaultText = "(6+2-8*16*4)/100-8";
+    private String defaultText = "-2-2";
     ArrayList<JButton> numbers;
     JButton bPoint,bEnter,bMult,bDiv,bSub,bAdd,bBack,bC,bCE;
     
@@ -41,12 +41,17 @@ public class Calculator extends JFrame{
         addButtonFunction();
     }
     private boolean isNumber(String param){
-        return (getIndexOfNextOperator(param) == -1 && getIndexOfPreviousOperator(param) == -1) 
-                || (param.startsWith("-") && getIndexOfNextOperator(param) == -1);
+        try{
+            Double.valueOf(param);
+            return true;
+        }catch(Exception e){
+            return false;
+        }
     }
     private String calculate(String param){
-        if (isNumber(param)){
-            System.out.println("\n");
+        System.out.println(param);
+        System.out.println(isNumber(param) + " || " + (numOperands(param) == 1));
+        if (isNumber(param) || (isNumber(param) && numOperands(param) == 1)){
             return param;
         }
         else if (param.contains("(")){
@@ -83,8 +88,19 @@ public class Calculator extends JFrame{
                 index = module.substring(1).indexOf(operator);
         int previous = getIndexOfPreviousOperator(module.substring(0, index));
         int next = getIndexOfNextOperator(module.substring(index+1));
-        System.out.println(module.substring(previous+1, index));System.out.println(previous+1+" "+index);
-        part1 = new BigDecimal(module.substring(previous+1, index));
+        
+//        try{
+            if(module.startsWith("-")){
+                part1 = new BigDecimal(module.substring(previous, index+1));
+            }else{
+                part1 = new BigDecimal(module.substring(previous+1, index));
+            }
+//        }catch(Exception e){
+//            return module;
+//        }finally{
+//            part1 = new BigDecimal(0);
+//        }
+        
         if (numOperators(module) == 2 && previous == '-')
             part2 = new BigDecimal('-'+module.substring(index+2));
         else if (next == -1)
@@ -105,13 +121,16 @@ public class Calculator extends JFrame{
                 ans = part1.add(part2);
                 break;
             case "-":
+                if (module.startsWith("-"))
+                    ans = part1.add(part2);
+                else
                     ans = part1.subtract(part2);
                 break;
             default:
                 ans = new BigDecimal(0);
         }
         System.out.println("Answer: "+ans);
-        if (next == -1 && previous == -1)
+        if (next == -1 && (previous == -1 || ans.toString().startsWith("-")))
             return calculate(String.valueOf(ans));
         else if (next == -1 && previous != -1)
             return calculate(module.substring(0, previous+1)+String.valueOf(ans));
@@ -149,6 +168,14 @@ public class Calculator extends JFrame{
     }
     
     //Gets number of operators for special cases
+    private int numOperands(String module){
+        int numOperands = 0;
+        for(int i = 0; i < module.length(); i++){
+            if (module.charAt(i) == '+' || module.charAt(i) == '-' || module.charAt(i) == '/' || module.charAt(i) == '*')
+                numOperands++;
+        }
+        return numOperands;
+    }
     private int numOperators(String module){
         int numOps = 0;
         for (int i = 0; i < module.length(); i++){
