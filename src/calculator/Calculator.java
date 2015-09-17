@@ -34,7 +34,7 @@ public class Calculator extends JFrame{
     public final Dimension prefferedSize = new Dimension(FRAME_HEIGHT,FRAME_WIDTH);
     private JTextField text;
     private JTextField answerField;
-    private String defaultText = "2^2^2";
+    private String defaultText = "Problem";
     ArrayList<JButton> numbers;
     JButton bPoint,bEnter,bMult,bDiv,bSub,bAdd,bBack,bC,bCE;
     
@@ -51,7 +51,6 @@ public class Calculator extends JFrame{
         }
     }
     private String calculate(String param){
-        System.out.println(param);
         System.out.println(isNumber(param) + " || " + (numOperands(param) == 1));
         if (isNumber(param) || (isNumber(param) && numOperands(param) == 1)){
             return param;
@@ -357,7 +356,6 @@ public class Calculator extends JFrame{
         
         ArrayList<JMenu> menus = new ArrayList<>();
         for (int i = 0; i < menuNames.length; i++){
-            JMenu jmenu;
             menus.add(new JMenu(menuNames[i]));
             menuBar.add(menus.get(i));
         }
@@ -366,9 +364,10 @@ public class Calculator extends JFrame{
         
         setJMenuBar(menuBar);
         
-        text = new JTextField("");
+        text = new JTextField();
         text.setText(defaultText);
         text.setFont(new Font("Arial", Font.PLAIN, 40));
+        text.selectAll();
         c.gridy = 1;
         c.fill = GridBagConstraints.BOTH;
         c.weightx = 1;
@@ -426,6 +425,7 @@ public class Calculator extends JFrame{
         JPanel answer = new JPanel(new GridLayout(0,1));
         answerField = new JTextField("");
         answerField.setFont(new Font("Arial", Font.BOLD, 40));
+        answerField.setText("Answer");
         answer.add(answerField);
         c.gridy = 4;
         c.weighty = 8;
