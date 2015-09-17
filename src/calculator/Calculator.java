@@ -34,11 +34,7 @@ public class Calculator extends JFrame{
     public final Dimension prefferedSize = new Dimension(FRAME_HEIGHT,FRAME_WIDTH);
     private JTextField text;
     private JTextField answerField;
-<<<<<<< HEAD
     private String defaultText = "2^2^2";
-=======
-    private String defaultText = "-2-2";
->>>>>>> 9b8e4feae5ecb38bec146a6ac3a6117dfe13a4c1
     ArrayList<JButton> numbers;
     JButton bPoint,bEnter,bMult,bDiv,bSub,bAdd,bBack,bC,bCE;
     
@@ -55,11 +51,8 @@ public class Calculator extends JFrame{
         }
     }
     private String calculate(String param){
-<<<<<<< HEAD
-=======
         System.out.println(param);
         System.out.println(isNumber(param) + " || " + (numOperands(param) == 1));
->>>>>>> 9b8e4feae5ecb38bec146a6ac3a6117dfe13a4c1
         if (isNumber(param) || (isNumber(param) && numOperands(param) == 1)){
             return param;
         }
@@ -106,7 +99,6 @@ public class Calculator extends JFrame{
             
             if (index == 0)
                 index = module.substring(1).indexOf(operator);
-<<<<<<< HEAD
             int previous = getIndexOfPreviousOperator(module.substring(0, index));
             int next = getIndexOfNextOperator(module.substring(index+1));
             BigDecimal part1,part2;
@@ -168,62 +160,6 @@ public class Calculator extends JFrame{
         }catch(Exception e){
             e.printStackTrace();
         }
-=======
-        int previous = getIndexOfPreviousOperator(module.substring(0, index));
-        int next = getIndexOfNextOperator(module.substring(index+1));
-        
-//        try{
-            if(module.startsWith("-")){
-                part1 = new BigDecimal(module.substring(previous, index+1));
-            }else{
-                part1 = new BigDecimal(module.substring(previous+1, index));
-            }
-//        }catch(Exception e){
-//            return module;
-//        }finally{
-//            part1 = new BigDecimal(0);
-//        }
-        
-        if (numOperators(module) == 2 && previous == '-')
-            part2 = new BigDecimal('-'+module.substring(index+2));
-        else if (next == -1)
-            part2 = new BigDecimal(module.substring((index+1),module.length()));
-        else
-            part2 = new BigDecimal(module.substring(index+1, index+next+1));
-        
-        System.out.println("part1: "+part1+" || part2: "+part2);
-        BigDecimal ans;
-        switch(operator){
-            case "*":
-                ans = part1.multiply(part2);
-                break;
-            case "/":
-                ans = part1.divide(part2);
-                break;
-            case "+":
-                ans = part1.add(part2);
-                break;
-            case "-":
-                if (module.startsWith("-"))
-                    ans = part1.add(part2);
-                else
-                    ans = part1.subtract(part2);
-                break;
-            default:
-                ans = new BigDecimal(0);
-        }
-        System.out.println("Answer: "+ans);
-        if (next == -1 && (previous == -1 || ans.toString().startsWith("-")))
-            return calculate(String.valueOf(ans));
-        else if (next == -1 && previous != -1)
-            return calculate(module.substring(0, previous+1)+String.valueOf(ans));
-        else if (next != -1 && previous == -1)
-            return calculate(String.valueOf(ans)+module.substring(index+next+1));
-        else if (next != -1 && previous != -1)
-            return calculate(module.substring(0, previous+1)+String.valueOf(ans)+module.substring(index+next+1));
-        
-        System.out.println("Error when parsing module: "+module);
->>>>>>> 9b8e4feae5ecb38bec146a6ac3a6117dfe13a4c1
         return "Error";
     }
     /*Gets the index of the first operator in the specified string.
